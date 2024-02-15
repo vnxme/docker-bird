@@ -1,7 +1,30 @@
 ARG ALPINE_VERSION=3.18
+ARG ZT_COMMIT=327eb9013b39809835a912c9117a0b9669f4661f
+
+FROM --platform=${BUILDPLATFORM:-linux/amd64} alpine:${ALPINE_VERSION} as builder
+
+ARG ZT_COMMIT
+
+RUN apk add --update alpine-sdk cargo linux-headers openssl-dev \
+    && git clone --quiet https://github.com/zerotier/ZeroTierOne.git /src \
+    && git -C src reset --quiet --hard ${ZT_COMMIT} \
+    && cd /src \
+    && make -f make-linux.mk
 
 FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:${ALPINE_VERSION}
 
-RUN apk add --update --no-cache bird && mkdir /etc/bird && mv /etc/bird.conf /etc/bird/bird.conf
+COPY --from=builder /src/zerotier-one /usr/sbin/
 
-CMD ["/usr/sbin/bird", "-c", "/etc/bird/bird.conf", "-f", "-R"]
+RUN apk add --no-cache --purge --clean-protected libc6-compat libstdc++ bird curl iproute2 iptables ip6tables net-tools iputils-ping openssl \
+    && mkdir -p /etc/bird && mv /etc/bird.conf /etc/bird/bird.conf \
+    && ln -s /usr/sbin/zerotier-one /usr/sbin/zerotier-idtool \
+    && ln -s /usr/sbin/zerotier-one /usr/sbin/zerotier-cli \
+    && rm -rf /var/cache/apk/*
+
+COPY entrypoint.sh zerotier.sh /
+RUN chmod 755 /entrypoint.sh /zerotier.sh
+
+HEALTHCHECK --interval=1s CMD /bin/sh /healthcheck.sh
+
+CMD []
+ENTRYPOINT ["/entrypoint.sh"]

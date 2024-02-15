@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "main"
+      - "zerotier"
     tags:
       - 'v*.*.*'
   pull_request:
