@@ -109,7 +109,7 @@ done
 
 log_params "Writing healthcheck for networks:" $@
 
-cat >/healthcheck.sh <<EOF
+cat >/app/healthcheck.sh <<EOF
 #!/bin/sh
 for i in $@ ${ZEROTIER_JOIN_NETWORKS}
 do
@@ -117,7 +117,7 @@ do
 done
 EOF
 
-chmod +x /healthcheck.sh
+chmod +x /app/healthcheck.sh
 
 log_params "zerotier-cli info:" "$(zerotier-cli info)"
 

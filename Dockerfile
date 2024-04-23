@@ -19,12 +19,12 @@ RUN apk add --no-cache --purge --clean-protected libc6-compat libstdc++ bird cur
     && mkdir -p /etc/bird && mv /etc/bird.conf /etc/bird/bird.conf \
     && ln -s /usr/sbin/zerotier-one /usr/sbin/zerotier-idtool \
     && ln -s /usr/sbin/zerotier-one /usr/sbin/zerotier-cli \
-    && rm -rf /var/cache/apk/*
+    && rm -rf /var/cache/apk/* && mkdir -p /app/hooks/up /app/hooks/down
 
-COPY entrypoint.sh zerotier.sh /
-RUN chmod 755 /entrypoint.sh /zerotier.sh
+COPY entrypoint.sh zerotier.sh /app/
+RUN chmod 755 /app/*.sh
 
-HEALTHCHECK --interval=1s CMD /bin/sh /healthcheck.sh
+HEALTHCHECK --interval=1s CMD /bin/sh /app/healthcheck.sh
 
 CMD []
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
