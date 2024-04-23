@@ -3,13 +3,12 @@ name: docker-publish
 on:
   push:
     branches:
-      - "main"
       - "zerotier"
     tags:
-      - 'v*.*.*'
+      - 'v*.*.*-zerotier.*.*.*'
   pull_request:
     branches:
-      - 'main'
+      - 'zerotier'
 
 env:
   SWGPGO_BRANCH: ${{ github.ref_name }}
@@ -34,8 +33,6 @@ jobs:
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
             type=sha
       - name: Login to Docker Hub
         uses: docker/login-action@v3
