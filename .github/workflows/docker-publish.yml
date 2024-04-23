@@ -3,13 +3,12 @@ name: docker-publish
 on:
   push:
     branches:
-      - "main"
       - "openvpn"
     tags:
-      - 'v*.*.*'
+      - 'v*.*.*-openvpn.*.*.*'
   pull_request:
     branches:
-      - 'main'
+      - 'openvpn'
 
 env:
   SWGPGO_BRANCH: ${{ github.ref_name }}
@@ -34,8 +33,6 @@ jobs:
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
             type=sha
       - name: Login to Docker Hub
         uses: docker/login-action@v3
