@@ -4,10 +4,10 @@ FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:${ALPINE_VERSION}
 
 RUN apk add --update --no-cache --purge --clean-protected bird curl iproute2 iptables ip6tables net-tools iputils-ping openvpn \
 	&& mkdir /etc/bird && mv /etc/bird.conf /etc/bird/bird.conf \
-	&& rm -rf /var/cache/apk/*
+	&& rm -rf /var/cache/apk/* && mkdir -p /app/hooks/up /app/hooks/down
 
-COPY entrypoint.sh openvpn.sh /
-RUN chmod 755 /entrypoint.sh /openvpn.sh
+COPY entrypoint.sh openvpn.sh /app/
+RUN chmod 755 /app/*.sh
 
 CMD []
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
