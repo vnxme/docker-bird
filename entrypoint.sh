@@ -2,7 +2,7 @@
 
 hooks() {
     for file in /app/hooks/$1/*.sh; do
-        [ -f "$file" ] && [ -x "$file" ] && "$file"
+        [ -f "$file" ] && /bin/sh "$file"
     done
 }
 
