@@ -15,7 +15,7 @@ FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:${ALPINE_VERSION}
 
 COPY --from=builder /src/zerotier-one /usr/sbin/
 
-RUN apk add --no-cache --purge --clean-protected libc6-compat libcap libstdc++ bird curl iproute2 iptables iptables-legacy iputils-ping net-tools openssl \
+RUN apk add --no-cache --purge --clean-protected libc6-compat libcap libstdc++ bird curl iproute2 iptables iptables-legacy iputils-ping net-tools openssl vlan \
     && mkdir -p /etc/bird && mv /etc/bird.conf /etc/bird/bird.conf \
     && ln -s /usr/sbin/zerotier-one /usr/sbin/zerotier-idtool \
     && ln -s /usr/sbin/zerotier-one /usr/sbin/zerotier-cli \
