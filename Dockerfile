@@ -1,7 +1,7 @@
 ARG ALPINE_VERSION=3.21
 ARG ZT_COMMIT=185a3a2c76e6bf1b1c0415871f43076638eb007c
 
-FROM --platform=${BUILDPLATFORM:-linux/amd64} alpine:${ALPINE_VERSION} as builder
+FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:${ALPINE_VERSION} as builder
 
 ARG ZT_COMMIT
 
