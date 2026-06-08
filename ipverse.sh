@@ -23,8 +23,7 @@ else
 fi
 
 if [ ! -d "${DIR_PROV}" ]; then
-	echo "Error: Directory ${DIR_PROV} doesn't exist. Exiting."
-	exit 1
+	mkdir -p "${DIR_PROV}"
 fi
 
 if [ ! -f "${FILE_MAP}" ]; then
@@ -55,8 +54,7 @@ while IFS= read -r LINE || [ -n "${LINE}" ]; do
 		truncate -s 0 "${FILE_IPV6}"
 
 		for NUMBER in $(echo "${NUMBERS}" | tr "," "\n"); do
-			echo "# AS${NUMBER}" >> "${FILE_IPV4}"
-			echo "# AS${NUMBER}" >> "${FILE_IPV6}"
+			echo "# AS${NUMBER}" | tee -a "${FILE_IPV4}" "${FILE_IPV6}" > /dev/null
 
 			#FILE_TAB="${DIR_PROV}/${GROUP_LC}.as${NUMBER}.ipv4.txt"
 			#truncate -s 0 "${FILE_TAB}"

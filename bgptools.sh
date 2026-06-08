@@ -23,8 +23,7 @@ else
 fi
 
 if [ ! -d "${DIR_PROV}" ]; then
-	echo "Error: Directory ${DIR_PROV} doesn't exist. Exiting."
-	exit 1
+	mkdir -p "${DIR_PROV}"
 else
 	rm "${DIR_PROV}"/*.table.txt
 fi
