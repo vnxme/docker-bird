@@ -3,15 +3,12 @@ name: docker-publish
 on:
   push:
     branches:
-      - "main"
+      - "lists"
     tags:
-      - 'v*.*.*'
+      - 'v*.*.*-lists-*.*.*'
   pull_request:
     branches:
-      - 'main'
-
-env:
-  SWGPGO_BRANCH: ${{ github.ref_name }}
+      - 'lists'
 
 jobs:
   build:
