@@ -12,7 +12,7 @@ AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like
 DIR_CONF="/etc/bird/bird.conf.d"
 DIR_PROV="/etc/bird/${PROV}"
 
-FILE_MAP="/etc/bird/mapping.txt"
+FILE_MAP="/etc/bird/as.mapping.txt"
 FILE_TAB="${DIR_PROV}/table.txt"
 
 if [ ! -d "${DIR_CONF}" ]; then
