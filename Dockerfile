@@ -9,4 +9,4 @@ RUN chmod 755 /etc/bird/*.sh
 
 CMD ["/usr/sbin/bird", "-c", "/etc/bird/bird.conf", "-f", "-R"]
 
-HEALTHCHECK --interval=24h --timeout=15m --start-period=15s --retries=1 CMD /etc/bird/ipverse.sh && /usr/sbin/birdc configure || exit 1
+HEALTHCHECK --interval=24h --timeout=15m --start-period=15s --retries=1 CMD date +"%Y-%m-%d %H:%M:%S"; /etc/bird/ipverse.sh && /usr/sbin/birdc configure || exit 1
