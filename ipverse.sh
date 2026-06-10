@@ -49,7 +49,7 @@ if [ ! -s "${FILE_AS}" ] || [ "$(($(date +%s)-$(date -r "${FILE_AS}" +%s)))" -gt
 		truncate -s 0 "${FILE_EXTRACT}"
 
 		while IFS= read -r LINE || [ -n "${LINE}" ]; do
-			IFS="," read -r ID GROUP NUMBERS <<-EOF
+			IFS=" " read -r ID GROUP NUMBERS <<-EOF
 			${LINE}
 			EOF
 
