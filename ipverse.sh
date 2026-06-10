@@ -123,9 +123,11 @@ while IFS= read -r LINE || [ -n "${LINE}" ]; do
 		protocol static s4_${GROUP_LC} {
 			description "${GROUP} AS ${NUMBERS} IPv4";
 			ipv4 {
+				table mixed4;
 				import filter {
-					bgp_community.add((my_asn, my_com4));
-					bgp_community.add((my_asn, ${ID}));
+					bgp_community.add((group_main, tag_ip4));
+					bgp_community.add((group_main, tag_asn));
+					bgp_community.add((group_main, ${ID}));
 					accept;
 				};
 				export none;
@@ -136,9 +138,11 @@ while IFS= read -r LINE || [ -n "${LINE}" ]; do
 		protocol static s6_${GROUP_LC} {
 			description "${GROUP} AS ${NUMBERS} IPv6";
 			ipv6 {
+				table mixed6;
 				import filter {
-					bgp_community.add((my_asn, my_com6));
-					bgp_community.add((my_asn, ${ID}));
+					bgp_community.add((group_main, my_com6));
+					bgp_community.add((group_main, tag_asn));
+					bgp_community.add((group_main, ${ID}));
 					accept;
 				};
 				export none;
@@ -181,10 +185,11 @@ while IFS= read -r LINE || [ -n "${LINE}" ]; do
 		protocol static s4_${GROUP_LC} {
 			description "${GROUP} ${CODES} IPv4";
 			ipv4 {
+				table mixed4;
 				import filter {
-					bgp_community.add((my_asn, my_com4));
-					bgp_community.add((my_asn, my_geo));
-					bgp_community.add((geo_asn, ${ID}));
+					bgp_community.add((group_main, tag_ip4));
+					bgp_community.add((group_main, tag_geo));
+					bgp_community.add((group_geo, ${ID}));
 					accept;
 				};
 				export none;
@@ -195,10 +200,11 @@ while IFS= read -r LINE || [ -n "${LINE}" ]; do
 		protocol static s6_${GROUP_LC} {
 			description "${GROUP} ${CODES} IPv6";
 			ipv6 {
+				table mixed6;
 				import filter {
-					bgp_community.add((my_asn, my_com6));
-					bgp_community.add((my_asn, my_geo));
-					bgp_community.add((geo_asn, ${ID}));
+					bgp_community.add((group_main, my_com6));
+					bgp_community.add((group_main, tag_geo));
+					bgp_community.add((group_geo, ${ID}));
 					accept;
 				};
 				export none;
