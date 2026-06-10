@@ -140,7 +140,7 @@ while IFS= read -r LINE || [ -n "${LINE}" ]; do
 			ipv6 {
 				table mixed6;
 				import filter {
-					bgp_community.add((group_main, my_com6));
+					bgp_community.add((group_main, tag_ip6));
 					bgp_community.add((group_main, tag_asn));
 					bgp_community.add((group_main, ${ID}));
 					accept;
@@ -202,7 +202,7 @@ while IFS= read -r LINE || [ -n "${LINE}" ]; do
 			ipv6 {
 				table mixed6;
 				import filter {
-					bgp_community.add((group_main, my_com6));
+					bgp_community.add((group_main, tag_ip6));
 					bgp_community.add((group_main, tag_geo));
 					bgp_community.add((group_geo, ${ID}));
 					accept;
