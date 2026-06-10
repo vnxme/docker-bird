@@ -21,7 +21,7 @@ FILE_GEO="${DIR_PROV}/geo-ip-blocks.tar.gz"
 # FILE_ISO="${DIR_PROV}/iso-3166-slim-2.csv"
 
 FILE_AS_MAP="/etc/bird/as.mapping.txt"
-FILE_ISO_MAP="/etc/bird/geo.mapping.txt"
+FILE_ISO_MAP="/etc/bird/iso.mapping.txt"
 
 if [ ! -d "${DIR_CONF}" ]; then
 	echo "Error: Directory ${DIR_CONF} doesn't exist. Exiting."
@@ -51,7 +51,25 @@ if [ ! -f "${FILE_AS}" ] || [ "$(($(date +%s)-$(date -r "${FILE_AS}" +%s)))" -gt
 		echo "Error: File ${FILE_AS} is missing or obsolete and can't be downloaded. Exiting."
 		exit 1
 	else
-		tar -xzf "${FILE_AS}" -C "${DIR_PROV}"
+		# tar -xzf "${FILE_AS}" -C "${DIR_PROV}"
+
+		FILE_EXTRACT="${DIR_PROV}/as.list.txt"
+		truncate -s 0 "${FILE_EXTRACT}"
+
+		while IFS= read -r LINE || [ -n "${LINE}" ]; do
+			IFS="," read -r ID GROUP NUMBERS <<-EOF
+			${LINE}
+			EOF
+
+			if [ -n "${ID}" ] && [ -n "${GROUP}" ] && [ -n "${NUMBERS}" ]; then
+				for NUMBER in $(echo "${NUMBERS}" | tr "," "\n"); do
+					echo "as/${NUMBER}/ipv4-aggregated.txt" >> "${FILE_EXTRACT}"
+					echo "as/${NUMBER}/ipv6-aggregated.txt" >> "${FILE_EXTRACT}"
+				done
+			fi
+		done < "${FILE_AS_MAP}"
+
+		tar -xzf "${FILE_AS}" -C "${DIR_PROV}" -T "${FILE_EXTRACT}"
 	fi
 fi
 
@@ -69,7 +87,26 @@ if [ ! -f "${FILE_GEO}" ] || [ "$(($(date +%s)-$(date -r "${FILE_GEO}" +%s)))" -
 		echo "Error: File ${FILE_GEO} is missing or obsolete and can't be downloaded. Exiting."
 		exit 1
 	else
-		tar -xzf "${FILE_GEO}" -C "${DIR_PROV}"
+		# tar -xzf "${FILE_GEO}" -C "${DIR_PROV}"
+
+		FILE_EXTRACT="${DIR_PROV}/geo.list.txt"
+		truncate -s 0 "${FILE_EXTRACT}"
+
+		while IFS= read -r LINE || [ -n "${LINE}" ]; do
+			IFS="," read -r ID GROUP CODES <<-EOF
+			${LINE}
+			EOF
+
+			if [ -n "${ID}" ] && [ -n "${GROUP}" ] && [ -n "${CODES}" ]; then
+				for CODE in $(echo "${CODES}" | tr "," "\n"); do
+					CODE_LC="$(echo "${CODE}" | tr '[:upper:]' '[:lower:]')"
+					echo "country/${CODE_LC}/${CODE_LC}-ipv4.txt" >> "${FILE_EXTRACT}"
+					echo "country/${CODE_LC}/${CODE_LC}-ipv6.txt" >> "${FILE_EXTRACT}"
+				done
+			fi
+		done < "${FILE_ISO_MAP}"
+
+		tar -xzf "${FILE_GEO}" -C "${DIR_PROV}" -T "${FILE_EXTRACT}"
 	fi
 fi
 
