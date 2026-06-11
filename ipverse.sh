@@ -10,7 +10,7 @@ URL_GEO="https://github.com/ipverse/geo-ip-blocks/releases/download/latest/geo-i
 
 AGENT="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
 
-DIR_CONF="/etc/bird/bird.conf.d"
+DIR_CONF="/etc/bird/static.conf.d"
 DIR_PROV="/etc/bird/${PROV}"
 
 FILE_AS="${DIR_PROV}/as-ip-blocks.tar.gz"
