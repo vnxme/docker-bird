@@ -1,11 +1,13 @@
 ARG ALPINE_VERSION=3.23
 
+FROM --platform=${TARGETPLATFORM:-linux/amd64} xddxdd/bird-lg-go:latest AS frontend
 FROM --platform=${TARGETPLATFORM:-linux/amd64} xddxdd/bird-lgproxy-go:latest AS proxy
 
 FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:${ALPINE_VERSION}
 
 RUN apk add --update --no-cache bird curl supervisor traceroute tzdata && mkdir -p /etc/bird && mv /etc/bird.conf /etc/bird/sample.conf
 
+COPY --from=frontend /frontend /usr/local/bin/bird-lg-go
 COPY --from=proxy /proxy /usr/local/bin/bird-lgproxy-go
 
 COPY supervisord.conf /etc/supervisord.conf
