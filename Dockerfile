@@ -2,7 +2,7 @@ ARG ALPINE_VERSION=3.23
 
 FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:${ALPINE_VERSION}
 
-RUN apk add --update --no-cache bird curl && mkdir -p /etc/bird && mv /etc/bird.conf /etc/bird/sample.conf
+RUN apk add --update --no-cache bird curl tzdata && mkdir -p /etc/bird && mv /etc/bird.conf /etc/bird/sample.conf
 
 COPY bgp.conf.d /etc/bird/bgp.conf.d
 COPY static.conf.d /etc/bird/static.conf.d
