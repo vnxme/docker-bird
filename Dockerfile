@@ -4,7 +4,9 @@ FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:${ALPINE_VERSION}
 
 RUN apk add --update --no-cache bird curl && mkdir -p /etc/bird && mv /etc/bird.conf /etc/bird/sample.conf
 
-COPY --parents ./**/*.conf *.txt *.sh /etc/bird/
+COPY bgp.conf.d /etc/bird/bgp.conf.d
+COPY static.conf.d /etc/bird/static.conf.d
+COPY *.conf *.txt *.sh /etc/bird/
 RUN chmod 755 /etc/bird/*.sh
 
 CMD ["/usr/sbin/bird", "-c", "/etc/bird/bird.conf", "-f", "-R"]
